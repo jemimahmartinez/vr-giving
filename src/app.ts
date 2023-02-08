@@ -49,6 +49,8 @@ type Page = {
 	init: (self: VRGiving) => void;
 };
 
+const cache: { [key: string]: string } = {};
+
 const buttonDefs: ButtonDef[] = [
 	{ name: "$5", row: 0, col: 0, width: 1, action(self) { self.amountButton(this); } },
 	{ name: "$10", row: 0, col: 1, width: 1, action(self) { self.amountButton(this); } },
@@ -102,7 +104,8 @@ const pages: { [key: string]: Page } = {
 	// },
 	amount: {
 		title: "Select Amount to Pledge",
-		blurb: "Hi $User!\n\nIf you would like to make a gift\nto our community please select\nan amount and press next.",
+		blurb: 
+			"Hi $User!\n\nIf you would like to make a gift\nto our community please select\nan amount and press next.",
 		buttons: ["$5", "$10", "$20", "$50", "$100", "Other", "Reset"],
 		init(self) {
 			self.mobile = self.getCachedMobile();
@@ -112,7 +115,8 @@ const pages: { [key: string]: Page } = {
 	},
 	amountOther: {
 		title: "Enter Amount to Pledge",
-		blurb: "Hi $User!\n\nIf you would like to make a gift\nto our community please enter\nan amount and press next.",
+		blurb: 
+			"Hi $User!\n\nIf you would like to make a gift\nto our community please enter\nan amount and press next.",
 		buttons: keypad,
 		init(self) {
 			self.fieldValue = self.amount.toFixed(0);
@@ -120,7 +124,9 @@ const pages: { [key: string]: Page } = {
 	},
 	mobile: {
 		title: "Real world contact",
-		blurb: "You have elected to pledge:\n        $$Amount\n\nPlease enter your mobile\nnumber where we will send\nyour unique giving link.",
+		blurb: 
+			// eslint-disable-next-line max-len
+			"You have elected to pledge:\n        $$Amount\n\nPlease enter your mobile\nnumber where we will send\nyour unique giving link.",
 		buttons: [...keypad, "+"],
 		init(self) {
 			self.amount = +self.fieldValue;
@@ -129,7 +135,9 @@ const pages: { [key: string]: Page } = {
 	},
 	thanks: {
 		title: "Thanks for your Pledge, $User",
-		blurb: "We will send the pledge link\nfor $$Amount to:\n        $Mobile\n\nYour generous gift\nmakes a difference\nto all those people that\nour church supports.",
+		blurb: 
+			// eslint-disable-next-line max-len
+			"We will send the pledge link\nfor $$Amount to:\n        $Mobile\n\nYour generous gift\nmakes a difference\nto all those people that\nour church supports.",
 		buttons: ["Reset"],
 		init(self) {
 			self.mobile = self.fieldValue;
@@ -163,14 +171,12 @@ const buttonGrid = {
 const buttonHeight = buttonGrid.dx * 0.9 * 2;
 const buttonRadius = -buttonGrid.dy * 0.4;
 
-const cache: { [key: string]: string } = {};
-
 /**
  * The main class of this app. All the logic goes here.
  */
 export default class VRGiving {
-	amount: number = 0;
-	mobile: string = "+01";
+	amount = 0;
+	mobile = "+01";
 
 	private _fieldText = "";
 	get fieldValue(): string {
@@ -529,7 +535,7 @@ export default class VRGiving {
 	}
 
 	numberButton(button: ButtonDef) {
-		if (this.currentPage == pages["amountOther"]) {
+		if (this.currentPage === pages["amountOther"]) {
 			this.amount *= 10;
 			this.amount += +button.name;
 			this.fieldValue = this.amount.toFixed(0);
@@ -539,9 +545,9 @@ export default class VRGiving {
 	}
 
 	backspaceButton() {
-		if (!this.fieldValue) return;
+		if (!this.fieldValue) { return; }
 
-		if (this.currentPage == pages["amountOther"]) {
+		if (this.currentPage === pages["amountOther"]) {
 			this.amount = Math.floor(this.amount / 10);
 			this.fieldValue = this.amount.toFixed(0);
 		} else {
@@ -553,7 +559,7 @@ export default class VRGiving {
 	}
 
 	okButton() {
-		if (this.currentPage == pages["amountOther"]) {
+		if (this.currentPage === pages["amountOther"]) {
 			if (this.amount) {
 				this.gotoPage("mobile");
 			}
