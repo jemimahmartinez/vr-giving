@@ -1,0 +1,7 @@
+{
+	"name": "VR Giving",
+	"author": "Microsoft",
+	"license": "MIT",
+	"repositoryUrl": "https://github.com/pushpay/innovation/tree/vr-giving/hackathon/2023/vr-giving/vr-giving",
+	"optionalPermissions": ["user-interaction"]
+}
